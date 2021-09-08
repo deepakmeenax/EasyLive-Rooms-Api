@@ -1,7 +1,6 @@
 const express = require('express');
 
 const Property = require('../models/property');
-const geocoder = require('../utils/geocoder');
 
 const router = express.Router();
 

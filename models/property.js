@@ -1,7 +1,5 @@
 const mongoose= require('mongoose')
 
-const geocoder= require('../utils/geocoder')
-
 const PropertySchema= new mongoose.Schema({
   property_name :{
       type: String,
