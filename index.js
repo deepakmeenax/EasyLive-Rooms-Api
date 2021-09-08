@@ -2,16 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const passport = require('passport');
-const session = require('express-session');
-const mongoStore = require('connect-mongo')(session);
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
-const connectDB = require('./mongodb');
+const connectDB = require('./utils/mongodb');
 
 // load env vars
 dotenv.config({ path: './config/config.env' });
-
-require('./utils/passport')(passport)
 
 // Connect to database
 connectDB();
@@ -19,22 +16,16 @@ connectDB();
 const app = express();
 
 // Body parser
-app.use(express.json());
+// app.use(bodyParser.json({ limit: '30mb', extended: true }))
+app.use(bodyParser.json());
 
 // Enable cors
-app.use(cors());
-
-// set up session cookies
-app.use(session({
-  secret: process.env.SECRET,
-  resave: false,
-  saveUninitialized: false,
-  store: new mongoStore({mongooseConnection: mongoose.connection})
-}));
-
-// initialize passport
-app.use(passport.initialize());
-app.use(passport.session());
+if (process.env.NODE_ENV === 'Development') {
+  app.use(cors({
+      origin: process.env.CLIENT_URL
+  }))
+  app.use(morgan('dev'))
+}
 
 // Routes
 app.use(require('./routes/rooms'));

@@ -1,16 +1,13 @@
 const express = require('express')
-const passport = require('passport');
 
 const Property = require('../models/property')
 const geocoder = require('../utils/geocoder')
-const {ensureAuth}= require('../middleware/checkauth')
 
 const router=express.Router()
 
 //make a room
 //on */rooms
-
-router.post('/room', ensureAuth, async (req, res) => {
+router.post('/room', async (req, res) => {
 
   try {
     const room = await Property.create(req.body);
@@ -31,8 +28,7 @@ router.post('/room', ensureAuth, async (req, res) => {
 
 //finde all the rooms
 //on */rooms
-
-router.get('/rooms', ensureAuth, async (req, res) => {
+router.get('/rooms', async (req, res) => {
   try {
     const rooms = await Property.find();
 
@@ -51,8 +47,7 @@ router.get('/rooms', ensureAuth, async (req, res) => {
 
 //find rooms in redius of 50km where center is given location
 // */rooms/kota 
-
-router.get('/rooms/:loc', ensureAuth, async (req, res) => {
+router.get('/rooms/:loc', async (req, res) => {
 
   const location= req.params.loc
   const geoloc = await geocoder.geocode(location);
