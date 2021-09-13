@@ -7,9 +7,6 @@ const bodyParser = require('body-parser');
 
 const connectDB = require('./utils/mongodb');
 
-// load env vars
-dotenv.config({ path: './config/config.env' });
-
 // Connect to database
 connectDB();
 
@@ -21,10 +18,12 @@ app.use(bodyParser.json());
 
 // Enable cors
 if (process.env.NODE_ENV === 'Development') {
-  app.use(cors({
-      origin: process.env.CLIENT_URL
-  }))
-  app.use(morgan('dev'))
+  app.use(
+    cors({
+      origin: process.env.CLIENT_URL,
+    })
+  );
+  app.use(morgan('dev'));
 }
 
 // Routes
